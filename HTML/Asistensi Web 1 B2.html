@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservasi Laboratorium</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', sans-serif;
+    }
+
+    h3 {
+    color: #2d4d65;
+    font-weight: bold;
+    }
+
+    .btn-teal {
+    background-color: #379392;
+    color: white;
+    }
+
+    .btn-teal:hover {
+    background-color: #2f7a78;
+    color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      color: white;
+    }
+
+    .form-label {
+      font-weight: bold;
+    }
+
+    .bold {
+        border-top: 2px solid black;
+    }
+
+    .form-control {
+      border-radius: 0.5rem;
+    }
+
+    .container {
+      max-width: 800px;
+    }
+    .required::after {
+            content: " *";
+            color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-5 shadow p-4 rounded bg-white">
+    <h3 class="text-center mb-3">Reservasi Laboratorium</h3>
+    <p class="text-center text-muted">“ Silakan lengkapi formulir peminjaman lab di bawah ini untuk mengajukan permohonan ”</p>
+
+    <form id="reservationForm">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="orgName" class="form-label required">Nama Organisasi</label>
+          <input type="text" class="form-control" id="orgName" placeholder="Masukkan nama organisasi" required />
+        </div>
+        <div class="col-md-6">
+          <label for="eventName" class="form-label">Acara / Kegiatan</label>
+          <input type="text" class="form-control" id="eventName" placeholder="Masukkan acara/kegiatan" required />
+        </div>
+        <div class="col-md-6">
+          <label for="participants" class="form-label">Jumlah Peserta</label>
+          <input type="number" class="form-control" id="participants" placeholder="Masukkan jumlah peserta (orang)" required />
+        </div>
+        <div class="col-md-3">
+          <label for="startTime" class="form-label">Waktu Mulai</label>
+          <input type="time" class="form-control" id="startTime" required />
+        </div>
+        <div class="col-md-3">
+          <label for="endTime" class="form-label">Waktu Selesai</label>
+          <input type="time" class="form-control" id="endTime" required />
+        </div>
+        <div class="col-md-6">
+          <label for="date" class="form-label">Tanggal Pinjam</label>
+          <input type="date" class="form-control" id="date" required />
+        </div>
+        <div class="col-md-6">
+          <label for="proposal" class="form-label">Unggah Proposal Kegiatan</label>
+          <input type="file" class="form-control" id="proposal" accept=".pdf,.doc,.docx" />
+        </div>
+      </div>
+
+      <hr class="my-4 bold" />
+
+      <div class="d-flex align-items-center my-4 ">
+        <hr class="flex-grow-1 me-3 bold" />
+        <h5 class="m-0">Catatan</h5>
+        <hr class="flex-grow-1 ms-3 bold" />
+      </div>
+      <div class="mb-3">
+        <textarea class="form-control" id="notes" rows="4" placeholder="Catatan tambahan..."></textarea>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-teal me-2">Submit</button>
+        <button type="reset" class="btn btn-danger">Cancel</button>
+      </div>
+      <hr class="my-4 bold" />
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("reservationForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    alert("Formulir berhasil disubmit!");
+    });
+  </script>
+</body>
+</html>

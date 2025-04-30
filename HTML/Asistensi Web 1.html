@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservasi Laboratorium</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .form-section {
+            padding: 20px 30px;
+            border-right: 1px solid #e0e0e0;
+        }
+        .info-section {
+            background-color: #4ECDC4;
+            color: white;
+            padding: 20px;
+            height: 100%;
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+        .form-instruction {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .lab-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .info-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .info-details {
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .checkbox-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-submit {
+            background-color: #4ECDC4;
+            border: none;
+        }
+        .btn-submit:hover {
+            background-color: #3dbdb5;
+        }
+        .btn-cancel {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #212529;
+        }
+        .btn-cancel:hover {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="row g-0">
+            <!-- Form Section -->
+            <div class="col-md-8 form-section">
+                <h2 class="form-title">Reservasi Laboratorium</h2>
+                <p class="form-instruction">* Silakan lengkapi formulir peminjaman lab di bawah ini untuk mengajukan permohonan *</p>
+                
+                <form>
+                    <div class="row">
+                        <!-- Nama Organisasi -->
+                        <div class="col-md-6 form-group">
+                            <label for="organisasi" class="form-label required">Nama Organisasi</label>
+                            <input type="text" class="form-control" id="organisasi" placeholder="Masukkan nama organisasi" required>
+                        </div>
+                        
+                        <!-- Acara/Kegiatan -->
+                        <div class="col-md-6 form-group">
+                            <label for="acara" class="form-label required">Acara / Kegiatan</label>
+                            <input type="text" class="form-control" id="acara" placeholder="Masukkan acara/kegiatan" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Jumlah Peserta -->
+                        <div class="col-md-4 form-group">
+                            <label for="jumlahPeserta" class="form-label required">Jumlah Peserta</label>
+                            <input type="number" class="form-control" id="jumlahPeserta" placeholder="Masukkan jumlah peserta (orang)" min="1" required>
+                        </div>
+                        
+                        <!-- Waktu Mulai -->
+                        <div class="col-md-4 form-group">
+                            <label for="waktuMulai" class="form-label required">Waktu Mulai</label>
+                            <input type="time" class="form-control" id="waktuMulai" required>
+                        </div>
+                        
+                        <!-- Waktu Selesai -->
+                        <div class="col-md-4 form-group">
+                            <label for="waktuSelesai" class="form-label required">Waktu Selesai</label>
+                            <input type="time" class="form-control" id="waktuSelesai" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Tanggal Pinjam -->
+                        <div class="col-md-6 form-group">
+                            <label for="tanggalPinjam" class="form-label required">Tanggal Pinjam</label>
+                            <input type="date" class="form-control" id="tanggalPinjam" required>
+                        </div>
+                        
+                        <!-- Unggah Proposal -->
+                        <div class="col-md-6 form-group">
+                            <label for="proposal" class="form-label required">Unggah Proposal Kegiatan</label>
+                            <input type="file" class="form-control" id="proposal" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Kebutuhan Peralatan Khusus -->
+                    <div class="form-group">
+                        <label class="form-label">Kebutuhan Peralatan Khusus</label>
+                        <div class="checkbox-container">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="peralatan" id="speaker" value="speaker">
+                                <label class="form-check-label" for="speaker">Speaker</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="peralatan" id="alatUkur" value="alat-ukur">
+                                <label class="form-check-label" for="alatUkur">Alat Ukur</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="peralatan" id="pc" value="pc">
+                                <label class="form-check-label" for="pc">PC</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="peralatan" id="tv" value="tv">
+                                <label class="form-check-label" for="tv">TV</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Catatan -->
+                    <div class="form-group">
+                        <label for="catatan" class="form-label">Catatan</label>
+                        <textarea class="form-control" id="catatan" rows="3"></textarea>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="form-group mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                        <button type="reset" class="btn btn-cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Info Section -->
+            <div class="col-md-4 info-section">
+                <h4 class="info-title">Info Ruangan</h4>
+                <div id="carouselDs" class="carousel slide carousel-fade mb-3" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/ICLabs/iclabs_030/public/images/DS (1).jpg" alt="Laboratorium" class="lab-image">
+                        </div>
+                        <div class="carousel-item active">
+                            <img src="/ICLabs/iclabs_030/public/images/DS (2).jpg" alt="Laboratorium" class="lab-image">
+                        </div>
+                        <div class="carousel-item active">
+                            <img src="/ICLabs/iclabs_030/public/images/DS (3).jpg" alt="Laboratorium" class="lab-image">
+                        </div>
+                        <div class="carousel-item active">
+                            <img src="/ICLabs/iclabs_030/public/images/DS (4).jpg" alt="Laboratorium" class="lab-image">
+                        </div>
+                    </div>
+                </div>
+                <h5>Data Science</h5>
+                <p>Lokasi: Lantai 2</p>
+                <p>Kapasitas: 26 Orang</p>
+                
+                <div class="info-details">
+                    Laboratorium ini fokus dalam riset dan pengembangan di bidang Data Science dan Machine Learning. Dilengkapi dengan perangkat keras dan perangkat lunak terkini untuk mendukung pembelajaran dan penelitian.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

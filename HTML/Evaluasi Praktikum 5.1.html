@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript 5.1</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+        }
+        .tab1 {
+            width: auto;
+            height: 100px;
+            background-color: rgb(112, 230, 251);
+        }
+        .btn {
+            background: #2caf99;
+            color: white;
+            border: 2px solid rgb(210, 209, 209);
+            cursor: pointer;
+            margin: 7px;
+        }
+        .Input {
+            margin: 7px;
+        }
+        .ketik {
+            margin: 7px;
+            display: none;
+        }
+        .comment-output {
+            margin: 7px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <table class="tab1" border="1px" cellpadding="0" cellspacing="">
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td class="Input">
+                            <div class="Input">
+                                <b>PHP</b> Sedang Berulang Tahun
+                            </div>
+                            <p class="comment-output" id="output"></p>
+                            <input class="Input" id="Input" type="text" placeholder="Komentar" oninput="showTyping()"><br>
+                            <p class="ketik" id="ketik">Anda Sedang Mengetik...</p>
+                            <button class="btn" onclick="postComment()">Komentar</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <script>
+        function showTyping() {
+            let input = document.getElementById("Input").value;
+            let ketik = document.getElementById("ketik");
+
+            if (input.length > 0) {
+                ketik.style.display = "block";
+            } else {
+                ketik.style.display = "none";
+            }
+        }
+        function postComment() {
+            let input = document.getElementById("Input").value;
+            let output = document.getElementById("output");
+            let ketik = document.getElementById("ketik");
+            if (input.trim() !== "") {
+                output.innerHTML = `<span style="color:black; font-weight:bold">JavaScript : </span>${input}`;
+            }
+            ketik.style.display = "none";
+            document.getElementById("Input").value = ""; // Reset input field
+        }
+    </script>
+</body>
+</html>

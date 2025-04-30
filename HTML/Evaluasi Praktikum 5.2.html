@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penginputan Nilai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9e79f;
+            text-align: center;
+            padding-top: 20px;
+        }
+        .container {
+            text-align: left;
+            width: 350px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        label {
+            font-size: 16px;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+            width: 120px;
+            text-align: center;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 3px;
+        }
+        button:hover {
+            background-color: lightgray;
+        }
+        .result {
+            font-family: 'Times New Roman', Times, serif;
+            height: 250px;
+            padding: 8px;
+            font-size: 75px;
+            font-weight: bold;
+            color: white;
+            display: none;
+            border-radius: 5px;
+            text-align: left;
+            /* justify-content: center; */
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="output" class="result"></div>
+    <div class="container">
+        <h2>Inputkan Nilai</h2>
+        <label for="nilai"></label>
+        <input type="number" id="nilai" min="0" max="100">
+        <button onclick="cekNilai()">Nilai</button>
+    </div>
+<script>
+    function cekNilai() {
+        let nilai = document.getElementById("nilai").value;
+        let output = document.getElementById("output");
+
+        if (nilai === "") {
+            alert("Masukkan nilai terlebih dahulu!");
+            return;
+        }
+
+        nilai = parseInt(nilai);
+        output.style.display = "flex";
+
+        if (nilai >= 85) {
+            output.innerText = "Mendapatkan Nilai A";
+            output.style.backgroundColor = "green";
+        } else if (nilai >= 75 && nilai <= 79) {
+            output.innerText = "Mendapatkan Nilai B+";
+            output.style.backgroundColor = "orange";
+        } else if (nilai >= 60 && nilai <= 64) {
+            output.innerText = "Mendapatkan Nilai C+";
+            output.style.backgroundColor = "yellow";
+            output.style.color = "black";
+        } else if (nilai < 50) {
+            output.innerText = "Mendapatkan Nilai E";
+            output.style.backgroundColor = "red";
+        } else {
+            output.innerText = "";
+            output.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
