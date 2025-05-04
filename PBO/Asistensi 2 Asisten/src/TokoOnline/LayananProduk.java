@@ -12,15 +12,14 @@ public class LayananProduk implements InLayananProduk {
     private static LayananProduk instance;
     private Produk[] produk;
     private int size;
-    private static final int MAX_SIZE = 100;
+    private static final int INITIAL_CAPACITY = 100;
 
     private LayananProduk() {
-        produk = new Produk[MAX_SIZE];
+        produk = new Produk[INITIAL_CAPACITY];
         size = 0;
-        // Sample products
-        addProduct(new Produk(1, "Laptop", "Electronics", 999.99));
-        addProduct(new Produk(2, "Phone", "Electronics", 499.99));
-        addProduct(new Produk(3, "Book", "Books", 19.99));
+        addProduct(new Produk(1, "Air", "Makanan", 6500));
+        addProduct(new Produk(2, "Sapu", "Peralatan", 15000));
+        addProduct(new Produk(3, "Susu", "Makanan", 42000));
     }
 
     public static LayananProduk getInstance() {
@@ -30,26 +29,32 @@ public class LayananProduk implements InLayananProduk {
         return instance;
     }
 
-    private void addProduct(Produk product) {
-        if (size >= produk.length) {
-            Produk[] newProducts = new Produk[produk.length * 2];
-            System.arraycopy(produk, 0, newProducts, 0, produk.length);
-            produk = newProducts;
+    private void addProduct(InProduk product) {
+        if (product == null) {
+            return;
         }
-        produk[size++] = product;
+        if (size >= produk.length) {
+            int newCapacity = Math.max(produk.length * 2, produk.length + 1);
+            Produk[] newProducts = new Produk[newCapacity];
+            System.arraycopy(produk, 0, newProducts, 0, size);
+            produk = newProducts;
+            // System.out.println("Resized products array to: " + newCapacity); // Debug
+        }
+        produk[size++] = (Produk) product;
+        // System.out.println("Added product: " + product.getProductName()); // Debug
     }
 
     @Override
     public Produk[] getProduk() {
-        Produk[] hasil = new Produk[size];
-        System.arraycopy(produk, 0, hasil, 0, size);
-        return hasil;
+        Produk[] result = new Produk[size];
+        System.arraycopy(produk, 0, result, 0, size);
+        return result;
     }
 
     @Override
     public Produk getProductById(int productIdToAddToCart) {
         for (int i = 0; i < size; i++) {
-            if (produk[i].getId() == productIdToAddToCart) {
+            if (produk[i] != null && produk[i].getId() == productIdToAddToCart) {
                 return produk[i];
             }
         }
@@ -57,7 +62,8 @@ public class LayananProduk implements InLayananProduk {
     }
 
     public void clearServiceState() {
-        produk = new Produk[MAX_SIZE];
+        produk = new Produk[produk.length];
         size = 0;
+        // System.out.println("Cleared product service state"); // Debug
     }
 }

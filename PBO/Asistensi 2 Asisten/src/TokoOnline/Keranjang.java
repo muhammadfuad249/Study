@@ -12,10 +12,10 @@ package TokoOnline;
 public class Keranjang implements InKeranjang {
     private Produk[] produk;
     private int size;
-    private static final int MAX_SIZE = 100;
+    private static final int INITIAL_CAPACITY = 100;
 
     public Keranjang() {
-        this.produk = new Produk[MAX_SIZE];
+        this.produk = new Produk[INITIAL_CAPACITY];
         this.size = 0;
     }
 
@@ -24,15 +24,21 @@ public class Keranjang implements InKeranjang {
         return size == 0;
     }
 
-    public void addProduct(Produk productById) {
-        if (productById != null) {
-            if (size >= produk.length) {
-                Produk[] newProducts = new Produk[produk.length * 2];
-                System.arraycopy(produk, 0, newProducts, 0, produk.length);
-                produk = newProducts;
-            }
-            produk[size++] = productById;
+    @Override
+    public void addProduct(InProduk productById) {
+        if (productById == null) {
+            return;
         }
+        if (size >= produk.length) {
+            // Perbesar array dengan ukuran minimal yang cukup
+            int newCapacity = Math.max(produk.length * 2, produk.length + 1);
+            Produk[] newProducts = new Produk[newCapacity];
+            System.arraycopy(produk, 0, newProducts, 0, size);
+            produk = newProducts;
+            // System.out.println("Resized products array to: " + newCapacity); // Debug
+        }
+        produk[size++] = (Produk) productById;
+        // System.out.println("Added product: " + productById.getProductName()); // Debug
     }
 
     @Override
@@ -44,12 +50,9 @@ public class Keranjang implements InKeranjang {
 
     @Override
     public void clear() {
-        produk = new Produk[MAX_SIZE];
+        // Pertahankan kapasitas saat ini
+        produk = new Produk[produk.length];
         size = 0;
-    }
-
-    @Override
-    public void addProduct(InProduk productById) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // System.out.println("Cleared cart"); // Debug
     }
 }

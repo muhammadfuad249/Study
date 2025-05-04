@@ -10,7 +10,7 @@ package TokoOnline;
  */
 public interface InPesanan {
     boolean isCreditCardNumberValid(String userInput);
-    void setCreditCardNumber(String userInput);
+    void setKartuKredit(String userInput);
     void setProducts(InProduk[] products);
     void setCustomerId(int customerId);
     int getCustomerId();

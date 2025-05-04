@@ -11,5 +11,5 @@ package TokoOnline;
 public interface InLayananPesanan {
     void addOrder(InPesanan order);
     InPesanan[] getOrdersByUserId(int userId);
-    InPesanan[] getOrders();
+    InPesanan[] getPesan();
 }

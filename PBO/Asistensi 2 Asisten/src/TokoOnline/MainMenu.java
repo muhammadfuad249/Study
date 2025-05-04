@@ -162,7 +162,7 @@ public class MainMenu implements InMenu {
         String creditCard = scanner.nextLine();
         InPesanan order = new Pesanan();
         if (order.isCreditCardNumberValid(creditCard)) {
-            order.setCreditCardNumber(creditCard);
+            order.setKartuKredit(creditCard);
             order.setCustomerId(context.getLoggedInUser().getId());
             order.setProducts(context.getSessionCart().getProducts());
             LayananPesanan.getInstance().addOrder(order);

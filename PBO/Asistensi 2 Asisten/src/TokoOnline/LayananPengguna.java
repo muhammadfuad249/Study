@@ -12,10 +12,10 @@ public class LayananPengguna implements InLayananPengguna {
     private static LayananPengguna instance;
     private Pengguna[] pengguna;
     private int size;
-    private static final int MAX_SIZE = 100;
+    private static final int INITIAL_CAPACITY = 100;
 
     private LayananPengguna() {
-        pengguna = new Pengguna[MAX_SIZE];
+        pengguna = new Pengguna[INITIAL_CAPACITY];
         size = 0;
     }
 
@@ -26,49 +26,51 @@ public class LayananPengguna implements InLayananPengguna {
         return instance;
     }
 
-    public String registerUser(Pengguna user) {
+    @Override
+    public String registerUser(InPengguna user) {
         if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
             return "You have to input email to register. Please, try one more time";
         }
         for (int i = 0; i < size; i++) {
-            if (pengguna[i].getEmail().equals(user.getEmail())) {
+            if (pengguna[i] != null && pengguna[i].getEmail().equals(user.getEmail())) {
                 return "This email is already used by another user. Please, use another email";
             }
         }
         if (size >= pengguna.length) {
-            Pengguna[] newUsers = new Pengguna[pengguna.length * 2];
-            System.arraycopy(pengguna, 0, newUsers, 0, pengguna.length);
+            int newCapacity = Math.max(pengguna.length * 2, pengguna.length + 1);
+            Pengguna[] newUsers = new Pengguna[newCapacity];
+            System.arraycopy(pengguna, 0, newUsers, 0, size);
             pengguna = newUsers;
+            // System.out.println("Resized users array to: " + newCapacity); // Debug
         }
-        pengguna[size++] = user;
+        pengguna[size++] = (Pengguna) user;
+        // System.out.println("Registered user: " + user.getEmail()); // Debug
         return "New user is created";
     }
 
     @Override
     public Pengguna[] getPengguna() {
-        Pengguna[] hasil = new Pengguna[size];
-        System.arraycopy(pengguna, 0, hasil, 0, size);
-        return hasil;
+        Pengguna[] result = new Pengguna[size];
+        System.arraycopy(pengguna, 0, result, 0, size);
+        return result;
     }
 
     @Override
     public Pengguna getUserByEmail(String userEmail) {
-        for (int i = 0; i < size; i++) {
-            if (pengguna[i].getEmail().equals(userEmail)) {
-                return pengguna[i];
+        if (userEmail != null) {
+            for (int i = 0; i < size; i++) {
+                if (pengguna[i] != null && userEmail.equals(pengguna[i].getEmail())) {
+                    return pengguna[i];
+                }
             }
         }
         return null;
     }
 
     public void clearServiceState() {
-        pengguna = new Pengguna[MAX_SIZE];
+        pengguna = new Pengguna[pengguna.length];
         size = 0;
         Pengguna.clearState();
-    }
-
-    @Override
-    public String registerUser(InPengguna user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // System.out.println("Cleared user service state"); // Debug
     }
 }

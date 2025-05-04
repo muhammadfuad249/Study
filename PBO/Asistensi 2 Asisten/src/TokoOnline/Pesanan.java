@@ -11,7 +11,7 @@ package TokoOnline;
 public class Pesanan implements InPesanan {
     private int customerId;
     private InProduk[] products;
-    private String creditCardNumber;
+    private String kartuKredit;
 
     public Pesanan() {}
 
@@ -26,8 +26,8 @@ public class Pesanan implements InPesanan {
     }
 
     @Override
-    public void setCreditCardNumber(String userInput) {
-        this.creditCardNumber = userInput;
+    public void setKartuKredit(String userInput) {
+        this.kartuKredit = userInput;
     }
 
     @Override

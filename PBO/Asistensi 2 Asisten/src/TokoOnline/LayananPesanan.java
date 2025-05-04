@@ -12,10 +12,10 @@ public class LayananPesanan implements InLayananPesanan {
     private static LayananPesanan instance;
     private Pesanan[] pesan;
     private int size;
-    private static final int MAX_SIZE = 100;
+    private static final int INITIAL_CAPACITY = 100;
 
     private LayananPesanan() {
-        pesan = new Pesanan[MAX_SIZE];
+        pesan = new Pesanan[INITIAL_CAPACITY];
         size = 0;
     }
 
@@ -26,22 +26,27 @@ public class LayananPesanan implements InLayananPesanan {
         return instance;
     }
 
-    public void addOrder(Pesanan order) {
-        if (order != null) {
-            if (size >= pesan.length) {
-                Pesanan[] newOrders = new Pesanan[pesan.length * 2];
-                System.arraycopy(pesan, 0, newOrders, 0, pesan.length);
-                pesan = newOrders;
-            }
-            pesan[size++] = order;
+    @Override
+    public void addOrder(InPesanan order) {
+        if (order == null) {
+            return;
         }
+        if (size >= pesan.length) {
+            int newCapacity = Math.max(pesan.length * 2, pesan.length + 1);
+            Pesanan[] newOrders = new Pesanan[newCapacity];
+            System.arraycopy(pesan, 0, newOrders, 0, size);
+            pesan = newOrders;
+            // System.out.println("Resized orders array to: " + newCapacity); // Debug
+        }
+        pesan[size++] = (Pesanan) order;
+        // System.out.println("Added order for user: " + order.getCustomerId()); // Debug
     }
 
     @Override
     public Pesanan[] getOrdersByUserId(int userId) {
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (pesan[i].getCustomerId() == userId) {
+            if (pesan[i] != null && pesan[i].getCustomerId() == userId) {
                 count++;
             }
         }
@@ -49,7 +54,7 @@ public class LayananPesanan implements InLayananPesanan {
         Pesanan[] userOrders = new Pesanan[count];
         int index = 0;
         for (int i = 0; i < size; i++) {
-            if (pesan[i].getCustomerId() == userId) {
+            if (pesan[i] != null && pesan[i].getCustomerId() == userId) {
                 userOrders[index++] = pesan[i];
             }
         }
@@ -57,19 +62,15 @@ public class LayananPesanan implements InLayananPesanan {
     }
 
     @Override
-    public Pesanan[] getOrders() {
+    public Pesanan[] getPesan() {
         Pesanan[] result = new Pesanan[size];
         System.arraycopy(pesan, 0, result, 0, size);
         return result;
     }
 
     public void clearServiceState() {
-        pesan = new Pesanan[MAX_SIZE];
+        pesan = new Pesanan[pesan.length];
         size = 0;
-    }
-
-    @Override
-    public void addOrder(InPesanan order) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // System.out.println("Cleared order service state"); // Debug
     }
 }
