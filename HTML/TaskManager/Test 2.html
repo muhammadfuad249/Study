@@ -84,24 +84,6 @@
         .modal-content {
             border-radius: 10px;
         }
-        .status-selesai {
-            display: inline-block;
-            background-color: #28a745;
-            color: white !important;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        .status-belum-selesai {
-            display: inline-block;
-            background-color: rgb(255, 221, 0);
-            color: rgb(255, 255, 255) !important;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
     </style>
 </head>
 <body>
@@ -239,16 +221,13 @@
                 );
             }
 
-            // Sort tasks by date (ascending)
-            filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
-
             filteredTasks.forEach((task, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${task.name}</td>
                     <td>${task.category}</td>
                     <td>${task.date}</td>
-                    <td><span class="${task.status === 'Selesai' ? 'status-selesai' : 'status-belum-selesai'}">${task.status}</span></td>
+                    <td>${task.status}</td>
                     <td>
                         <button class="btn btn-sm btn-warning" onclick="editTask(${index})">Edit</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteTask(${index})">Hapus</button>
@@ -295,8 +274,6 @@
                 displayTasks(currentCategory, searchInput.value);
             });
         }
-        // Reset inputs when modal is closed
-        document.getElementById('taskModal').addEventListener('hidden.bs.modal', resetModalInputs);
     </script>
 </body>
 </html>
