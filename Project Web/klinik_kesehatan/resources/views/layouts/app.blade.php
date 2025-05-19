@@ -25,8 +25,17 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('dokter.index') }}">Dokter</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('obat.index') }}">Obat</a></li>
                         @endif
+                        @if(auth()->user()->role == 'dokter')
+                            <li class="nav-item"><a class="nav-link" href="{{ route('pasien.index') }}">Pasien</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('kunjungan.index') }}">Kunjungan</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('resep.index') }}">Resep</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('obat.index') }}">Obat</a></li>
+                        @endif
+                        @if(auth()->user()->role == 'resepsionis')
                         <li class="nav-item"><a class="nav-link" href="{{ route('kunjungan.index') }}">Kunjungan</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('resep.index') }}">Resep</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('obat.index') }}">Obat</a></li>
+                        @endif
                     @else
                         <li class="nav-item"><p class="nav-link text-light">Pengguna belum login</p></li>
                     @endif

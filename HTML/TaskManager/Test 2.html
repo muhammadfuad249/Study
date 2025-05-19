@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>Manajemen Tugas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -33,22 +33,19 @@
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
         }
         .sidebar h5 {
-            color: #007bff;
+            color: black;
             margin-bottom: 15px;
         }
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            color: #333;
-            text-decoration: none;
+        .list-group-item {
+            border: none;
             border-radius: 5px;
             margin-bottom: 5px;
             transition: all 0.3s ease;
         }
-        .sidebar a:hover {
+        .list-group-item:hover {
             background-color: #e9ecef;
         }
-        .sidebar a.active {
+        .list-group-item.active {
             background-color: #007bff;
             color: white;
             font-weight: 500;
@@ -84,13 +81,31 @@
         .modal-content {
             border-radius: 10px;
         }
+        .status-selesai {
+            display: inline-block;
+            background-color: #28a745;
+            color: white !important;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+        .status-belum-selesai {
+            display: inline-block;
+            background-color: #dc3545;
+            color: white !important;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Task Manager</a>
+            <a class="navbar-brand" href="#">Manajemen Tugas</a>
         </div>
     </nav>
 
@@ -99,10 +114,12 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h5>Kategori</h5>
-            <a href="#" class="category-link active" data-category="Semua">Semua</a>
-            <a href="#" class="category-link" data-category="Pribadi">Pribadi</a>
-            <a href="#" class="category-link" data-category="Kerja">Kerja</a>
-            <a href="#" class="category-link" data-category="Sekolah">Sekolah</a>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action category-link active" data-category="Semua">Semua</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Pribadi">Pribadi</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Kerja">Kerja</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Sekolah">Sekolah</a>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -130,7 +147,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Task Modal -->
     <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -171,11 +188,31 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus tugas ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         let editIndex = null;
         let currentCategory = 'Semua';
+        let deleteIndex = null;
 
         // Load tasks on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -183,12 +220,31 @@
             setupSearch();
         });
 
+        // Reset modal inputs
+        function resetModalInputs() {
+            document.getElementById('taskName').value = '';
+            document.getElementById('taskCategory').value = 'Pribadi';
+            document.getElementById('taskDate').value = '';
+            document.getElementById('taskStatus').value = 'Belum Selesai';
+            document.getElementById('taskModalLabel').textContent = 'Tambah Tugas';
+        }
+
         // Save task
         document.getElementById('saveTaskBtn').addEventListener('click', () => {
             const name = document.getElementById('taskName').value;
             const category = document.getElementById('taskCategory').value;
-            const date = document.getElementById('taskDate').value;
+            const unformattedDate = document.getElementById('taskDate').value;
             const status = document.getElementById('taskStatus').value;
+
+            // Format date to DD-MM-YYYY
+            let date = '';
+            if (unformattedDate) {
+                const dateObject = new Date(unformattedDate);
+                const day = String(dateObject.getDate()).padStart(2, '0');
+                const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+                const year = dateObject.getFullYear();
+                date = `${day}-${month}-${year}`;
+            }
 
             if (name && category && date && status) {
                 const task = { name, category, date, status };
@@ -201,8 +257,7 @@
                 localStorage.setItem('tasks', JSON.stringify(tasks));
                 displayTasks(currentCategory);
                 bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
-                document.getElementById('taskName').value = '';
-                document.getElementById('taskDate').value = '';
+                resetModalInputs(); // Reset inputs after saving
                 document.getElementById('searchInput').value = '';
             }
         });
@@ -221,21 +276,45 @@
                 );
             }
 
+            // Sort tasks by date (ascending, parsing DD-MM-YYYY)
+            filteredTasks.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.date.split('-').map(Number);
+                const [dayB, monthB, yearB] = b.date.split('-').map(Number);
+                return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+            });
+
             filteredTasks.forEach((task, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${task.name}</td>
                     <td>${task.category}</td>
                     <td>${task.date}</td>
-                    <td>${task.status}</td>
+                    <td><span class="${task.status === 'Selesai' ? 'status-selesai' : 'status-belum-selesai'}">${task.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning" onclick="editTask(${index})">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteTask(${index})">Hapus</button>
+                        <button class="btn btn-sm btn-primary" onclick="editTask(${index})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="showDeleteConfirm(${index})">Hapus</button>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
         }
+
+        // Show delete confirmation modal
+        function showDeleteConfirm(index) {
+            deleteIndex = index;
+            new bootstrap.Modal(document.getElementById('deleteConfirmModal')).show();
+        }
+
+        // Confirm delete
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (deleteIndex !== null) {
+                tasks.splice(deleteIndex, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                displayTasks(currentCategory, document.getElementById('searchInput').value);
+                bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
+                deleteIndex = null;
+            }
+        });
 
         // Edit task
         function editTask(index) {
@@ -243,17 +322,14 @@
             const task = tasks[index];
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskCategory').value = task.category;
-            document.getElementById('taskDate').value = task.date;
+
+            // Convert DD-MM-YYYY to YYYY-MM-DD for input date
+            const [day, month, year] = task.date.split('-');
+            document.getElementById('taskDate').value = `${year}-${month}-${day}`;
+
             document.getElementById('taskStatus').value = task.status;
             document.getElementById('taskModalLabel').textContent = 'Edit Tugas';
             new bootstrap.Modal(document.getElementById('taskModal')).show();
-        }
-
-        // Delete task
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            displayTasks(currentCategory, document.getElementById('searchInput').value);
         }
 
         // Filter tasks by category
@@ -274,6 +350,9 @@
                 displayTasks(currentCategory, searchInput.value);
             });
         }
+
+        // Reset inputs when modal is closed
+        document.getElementById('taskModal').addEventListener('hidden.bs.modal', resetModalInputs);
     </script>
 </body>
 </html>

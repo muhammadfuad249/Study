@@ -22,12 +22,41 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('pasien', PasienController::class);
-    Route::resource('dokter', DokterController::class)->middleware('role:admin');
-    Route::resource('obat', ObatController::class)->middleware('role:admin');
-    Route::resource('kunjungan', KunjunganController::class)->middleware('role:admin,resepsionis,dokter');
-    Route::resource('resep', ResepController::class)->middleware('role:admin,dokter');
+    Route::resource('dokter', DokterController::class);
+    Route::resource('obat', ObatController::class);
+    Route::resource('kunjungan', KunjunganController::class);
+    Route::resource('resep', ResepController::class);
     Route::get('/kunjungan/laporan', [KunjunganController::class, 'laporan'])->name('kunjungan.laporan');
 });
+
+// use App\Http\Controllers\DashboardController;
+// use App\Http\Controllers\PasienController;
+// use App\Http\Controllers\DokterController;
+// use App\Http\Controllers\ObatController;
+// use App\Http\Controllers\KunjunganController;
+// use App\Http\Controllers\ResepController;
+// use Illuminate\Support\Facades\Route;
+// use Illuminate\Support\Facades\Auth;
+
+// Route::get('/', function () {
+//     return redirect()->route('dashboard');
+// });
+
+// // Route::get('/', function () {
+// //     return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
+// // });
+
+// Auth::routes();
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//     Route::resource('pasien', PasienController::class);
+//     Route::resource('dokter', DokterController::class)->middleware('role:admin');
+//     Route::resource('obat', ObatController::class)->middleware('role:admin');
+//     Route::resource('kunjungan', KunjunganController::class)->middleware('role:admin,resepsionis,dokter');
+//     Route::resource('resep', ResepController::class)->middleware('role:admin,dokter');
+//     Route::get('/kunjungan/laporan', [KunjunganController::class, 'laporan'])->name('kunjungan.laporan');
+// });
     //  use App\Http\Controllers\DashboardController;
     //  use App\Http\Controllers\PasienController;
     //  use App\Http\Controllers\DokterController;

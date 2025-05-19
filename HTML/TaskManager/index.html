@@ -11,7 +11,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: #f5f7fa;
+            background-color: white;
         }
         .navbar {
             background-color: #007bff;
@@ -29,26 +29,24 @@
             width: 200px;
             background-color: #ffffff;
             padding: 20px;
-            border-right: 1px solid #dee2e6;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            width: 450px;
+            /* border-right: 1px solid #dee2e6;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05); */
         }
         .sidebar h5 {
-            color: #007bff;
+            color: #000000;
             margin-bottom: 15px;
         }
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 5px;
+        .list-group-item {
+            border: none;
+            /* border-radius: 5px; */
             margin-bottom: 5px;
             transition: all 0.3s ease;
         }
-        .sidebar a:hover {
+        .list-group-item:hover {
             background-color: #e9ecef;
         }
-        .sidebar a.active {
+        .list-group-item.active {
             background-color: #007bff;
             color: white;
             font-weight: 500;
@@ -95,8 +93,8 @@
         }
         .status-belum-selesai {
             display: inline-block;
-            background-color: rgb(255, 221, 0);
-            color: rgb(255, 255, 255) !important;
+            background-color: #f3d707;
+            color: white !important;
             padding: 2px 8px;
             border-radius: 4px;
             font-weight: 500;
@@ -117,10 +115,12 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h5>Kategori</h5>
-            <a href="#" class="category-link active" data-category="Semua">Semua</a>
-            <a href="#" class="category-link" data-category="Pribadi">Pribadi</a>
-            <a href="#" class="category-link" data-category="Kerja">Kerja</a>
-            <a href="#" class="category-link" data-category="Sekolah">Sekolah</a>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action category-link active" data-category="Semua">Semua</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Pribadi">Pribadi</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Kerja">Kerja</a>
+                <a href="#" class="list-group-item list-group-item-action category-link" data-category="Sekolah">Sekolah</a>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -129,7 +129,7 @@
                 <div class="search-container">
                     <input type="text" class="form-control" id="searchInput" placeholder="Cari tugas...">
                 </div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">Tambah Tugas</button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#taskModal">Tambah Tugas</button>
             </div>
 
             <!-- Table -->
@@ -164,6 +164,7 @@
                     <div class="mb-3">
                         <label for="taskCategory" class="form-label">Kategori</label>
                         <select class="form-select" id="taskCategory" required>
+                            <option value="Pilih Kategori" hidden>Pilih Kategori</option>
                             <option value="Pribadi">Pribadi</option>
                             <option value="Kerja">Kerja</option>
                             <option value="Sekolah">Sekolah</option>
@@ -176,6 +177,7 @@
                     <div class="mb-3">
                         <label for="taskStatus" class="form-label">Status</label>
                         <select class="form-select" id="taskStatus" required>
+                            <option value="Status" hidden>Status</option>
                             <option value="Belum Selesai">Belum Selesai</option>
                             <option value="Selesai">Selesai</option>
                         </select>
@@ -184,6 +186,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-primary" id="saveTaskBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus tugas ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Ya</button>
                 </div>
             </div>
         </div>
@@ -200,6 +220,15 @@
             displayTasks('Semua');
             setupSearch();
         });
+
+        // Reset modal inputs
+        function resetModalInputs() {
+            document.getElementById('taskName').value = '';
+            document.getElementById('taskCategory').value = 'Pribadi';
+            document.getElementById('taskDate').value = '';
+            document.getElementById('taskStatus').value = 'Belum Selesai';
+            document.getElementById('taskModalLabel').textContent = 'Tambah Tugas';
+        }
 
         // Save task
         document.getElementById('saveTaskBtn').addEventListener('click', () => {
@@ -219,8 +248,7 @@
                 localStorage.setItem('tasks', JSON.stringify(tasks));
                 displayTasks(currentCategory);
                 bootstrap.Modal.getInstance(document.getElementById('taskModal')).hide();
-                document.getElementById('taskName').value = '';
-                document.getElementById('taskDate').value = '';
+                resetModalInputs(); // Reset inputs after saving
                 document.getElementById('searchInput').value = '';
             }
         });
@@ -250,7 +278,7 @@
                     <td>${task.date}</td>
                     <td><span class="${task.status === 'Selesai' ? 'status-selesai' : 'status-belum-selesai'}">${task.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning" onclick="editTask(${index})">Edit</button>
+                        <button class="btn btn-sm btn-primary" onclick="editTask(${index})">Edit</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteTask(${index})">Hapus</button>
                     </td>
                 `;
@@ -270,12 +298,29 @@
             new bootstrap.Modal(document.getElementById('taskModal')).show();
         }
 
-        // Delete task
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-            displayTasks(currentCategory, document.getElementById('searchInput').value);
+        // Show delete confirmation modal
+        function showDeleteConfirm(index) {
+            deleteIndex = index;
+            new bootstrap.Modal(document.getElementById('deleteConfirmModal')).show();
         }
+
+        // Confirm delete
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (deleteIndex !== null) {
+                tasks.splice(deleteIndex, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                displayTasks(currentCategory, document.getElementById('searchInput').value);
+                bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal')).hide();
+                deleteIndex = null;
+            }
+        });
+
+        // // Delete task
+        // function deleteTask(index) {
+        //     tasks.splice(index, 1);
+        //     localStorage.setItem('tasks', JSON.stringify(tasks));
+        //     displayTasks(currentCategory, document.getElementById('searchInput').value);
+        // }
 
         // Filter tasks by category
         document.querySelectorAll('.category-link').forEach(link => {
@@ -295,6 +340,7 @@
                 displayTasks(currentCategory, searchInput.value);
             });
         }
+
         // Reset inputs when modal is closed
         document.getElementById('taskModal').addEventListener('hidden.bs.modal', resetModalInputs);
     </script>
